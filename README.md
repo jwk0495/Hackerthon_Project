@@ -10,16 +10,19 @@
 >***목표: 내 개인 브랜치를 팀의 최신 작업 내용(main 브랜치)과 동일한 상태로 만듭니다.***
 >
 >***1. main 브랜치로 이동하여 최신 내용 가져오기 (Pull)***
->`git checkout main`
 >
->`git pull origin main`
+>+ `git checkout main`
 >
->2. 본인 개인 브랜치로 이동
->`git checkout 본인브랜치이름`
+>+ `git pull origin main`
 >
->3. 최신 main 브랜치를 내 개인 브랜치로 병합 (Merge)
+>***2. 본인 개인 브랜치로 이동***
 >
->+ **`매우 중요: 이 과정을 통해 다른 팀원들의 작업 내용을 내 브랜치에 먼저 반영합니다.`**
+>+ `git checkout 본인브랜치이름`
+>
+>***3. 최신 main 브랜치를 내 개인 브랜치로 병합 (Merge)***
+>
+>
+>***`매우 중요: 이 과정을 통해 다른 팀원들의 작업 내용을 내 브랜치에 먼저 반영합니다.`***
 >   + `git merge main`
 >
 >   + 만약 충돌(Conflict)이 발생하면, 충돌 부분을 해결한 후 커밋해야 합니다.
@@ -47,31 +50,33 @@
 
 ## ⚙️ 개발 환경 설정 (Development Environment Setup)
 >1. Python 설치
->PC에 `파이썬`이 설치되어 있지 않다면, python.org에서 `최신 버전을 다운로드`하여 설치합니다.
 >
->설치 시 `"Add Python to PATH"` 옵션을 반드시 체크해주세요.
+>   PC에 `파이썬`이 설치되어 있지 않다면, python.org에서 `최신 버전을 다운로드`하여 설치합니다.
+>
+>   설치 시 `"Add Python to PATH"` 옵션을 반드시 체크해주세요.
 >
 >2. 가상 환경 생성 및 활성화
->터미널(CMD 또는 PowerShell)을 열고 프로젝트 폴더로 이동합니다.
+>   터미널(CMD 또는 PowerShell)을 열고 프로젝트 폴더로 이동합니다.
 >
->:: 예시: C 드라이브의 프로젝트 폴더로 이동
+>   :: 예시: C 드라이브의 프로젝트 폴더로 이동
 >
->`cd C:\Hackerthon_Project`
+>   `cd C:\Hackerthon_Project`
 >
->가상 환경 생성 (최초 한 번만)
+>   가상 환경 생성 (최초 한 번만)
 >
->`python -m venv venv`
+>   `python -m venv venv`
 >
->가상 환경 활성화
+>   가상 환경 활성화
 >
->`venv\Scripts\activate`
+>   `venv\Scripts\activate`
 >
->성공하면 프롬프트 맨 앞에 (venv) 가 표시됩니다.
+>   성공하면 프롬프트 맨 앞에 (venv) 가 표시됩니다.
 >
 >3. 필수 라이브러리 설치
+>
 >가상 환경이 활성화된 상태에서, 아래 명령어를 실행하여 필요한 모든 라이브러리를 설치합니다.
 >
->`pip install flask flask-socketio dronekit pymavlink prompt_toolkit wxPython`
+>   `pip install flask flask-socketio dronekit pymavlink prompt_toolkit wxPython`
 
 ## ▶️ 시스템 실행 방법 (How to Run)
 >두 개의 터미널 창이 필요합니다. 각 터미널에서 아래 작업을 순서대로 진행하세요.
