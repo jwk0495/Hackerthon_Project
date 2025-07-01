@@ -44,36 +44,36 @@
 >
 >**3. Pull Request (PR) 생성**
 >
->GitHub 저장소 페이지로 이동하여 `"Compare & pull request"` 버튼을 클릭합니다.
+>+ GitHub 저장소 페이지로 이동하여 `"Compare & pull request"` 버튼을 클릭합니다.
 >
->내 브랜치의 변경 사항을 main 브랜치로 병합해달라는 `요청(PR)을 작성`합니다.
+>+ 내 브랜치의 변경 사항을 main 브랜치로 병합해달라는 `요청(PR)을 작성`합니다.
 >
->제목과 내용을 잘 작성한 후 `PR을 생성`하고, 팀원들에게 `리뷰를 요청`합니다.
+>+ 제목과 내용을 잘 작성한 후 `PR을 생성`하고, 팀원들에게 `리뷰를 요청`합니다.
 ---
 
 ## ⚙️ 개발 환경 설정 (Development Environment Setup)
->1. Python 설치
+>**1. Python 설치**
 >
->   PC에 `파이썬`이 설치되어 있지 않다면, python.org에서 `최신 버전을 다운로드`하여 설치합니다.
+>+ PC에 `파이썬`이 설치되어 있지 않다면, python.org에서 `최신 버전을 다운로드`하여 설치합니다.
 >
->   설치 시 `"Add Python to PATH"` 옵션을 반드시 체크해주세요.
+>+ 설치 시 `"Add Python to PATH"` 옵션을 반드시 체크해주세요.
 >
->2. 가상 환경 생성 및 활성화
->   터미널(CMD 또는 PowerShell)을 열고 프로젝트 폴더로 이동합니다.
+>**2. 가상 환경 생성 및 활성화**
+>+ 터미널(CMD 또는 PowerShell)을 열고 프로젝트 폴더로 이동합니다.
 >
->   :: 예시: C 드라이브의 프로젝트 폴더로 이동
+>+ + :: 예시: C 드라이브의 프로젝트 폴더로 이동
 >
->   `cd C:\Hackerthon_Project`
+>+ + `cd C:\Hackerthon_Project`
 >
->   가상 환경 생성 (최초 한 번만)
+>+ 가상 환경 생성 (최초 한 번만)
 >
->   `python -m venv venv`
+>+ + `python -m venv venv`
 >
->   가상 환경 활성화
+>+ 가상 환경 활성화
 >
->   `venv\Scripts\activate`
+>+ + `venv\Scripts\activate`
 >
->   성공하면 프롬프트 맨 앞에 (venv) 가 표시됩니다.
+>+ 성공하면 프롬프트 맨 앞에 (venv) 가 표시됩니다.
 >
 >3. 필수 라이브러리 설치
 >
