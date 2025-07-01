@@ -98,15 +98,13 @@
 >     ```
 >     cd C:\Hackerthon_Project
 >     venv\Scripts\activate
->     
 >     ```
 >     
 > 2. 아래 명령어로 MAVProxy를 실행합니다.
 >     - **`-master=COM5`** 부분은 위에서 확인한 자신의 COM 포트 번호로 반드시 변경해야 합니다.
 >     
 >     ```
->     python venv\Scripts\mavproxy.py --master=COM5 --out=udp:127.0.0.1:14550 --console
->     
+>     python venv\Scripts\mavproxy.py --master=COM5 --out=udp:127.0.0.1:14550 --console  
 >     ```
 >     
 > 3. 성공하면 `STABILIZE>` 같은 프롬프트가 나타납니다. **이 창은 끄지 말고 그대로 두세요.**
@@ -117,7 +115,7 @@
 >     
 >     ```
 >     cd C:\Hackerthon_Project
->     venv\Scripts\activate
+>     .\venv\Scripts\activate
 >     ```
 >     
 > 2. 아래 명령어로 파이썬 웹 서버를 실행합니다.
