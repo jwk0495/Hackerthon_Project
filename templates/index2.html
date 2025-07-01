@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <! -- 메타 정보 및 제목 -->
+    <meta charset="UTF-8">
+    <meta name = "viewport" content="width=device-width, initial-scale=1.0">
+    <title> 드론 관제 시스템</title>
+    
+    <! -- 외부 라이브러리 및 아이콘, 폰트 로드 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script> <!-- 실시간 웹소켓 통신 -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"> <!-- 아이콘 사용 -->
+
+    <! -- css 스타일 -->
+    <style>
+        /* :root -> 문서 전체에서 사용할 컬러 테마 변수 정의 */
+        :root {
+            /*
+            bg      =>  배경
+            primary ->  주요 색상
+            text    ->  글자
+            border  ->  테두리
+            success ->  성공
+            warning ->  경고
+            error   ->  오류
+            */
+            --bg-dark: #121212;
+            --bg-surface: #1e1e1e;
+            --bg-surface-2: #2a2a2a;
+            --primary-accent: #3498db;
+            --text-primary: #ffffff;
+            --text-secondary: #b0b0b0;
+            --border-color: #333;
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+            --error-color: #e74c3c;
+        }
+        
+        /* body - 페이지 기본 스타일 */
+        body {
+            font-family: 'Roboto', 'Noto Sans KR', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+        }
+
+        /* .container - 전체 레이아웃 컨테이너 */
+        .container {
+            width: 100%;
+            max-width: 1400px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* 헤더 스타일 */
+        header {
+            background-color: var(--bg-surface);
+            padding: 15px 25px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            text-align: center;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2em;
+            color: var(--primary-accent);
+        }
+
+        /* 메인 컨텐츠 영역 (지도 + 상태) */
+        .main-content {
+            display: grid;
+            grid-template-columns: 3fr 1fr; /* 왼쪽(지도)과 오른쪽(상태) 너비 비율 3:1 */
+            gap: 20px;
+            min-height: 60vh;
+        }
+
+        /* 카드 - 각 패널의 기본 스타일 */
+        .card {
+            background-color: var(--bg-surface);
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 1.3em;
+        }
+
+        /* 지도 뷰 스타일 */
+        #map-view {
+            justify-content: center;
+            align-items: center;
+            font-size: 2em;
+            color: var(--text-secondary);
+            background-image:
+                    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+                    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        /* 상태 패널 스타일 */
+        .status-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        .status-item {
+            background-color: var(--bg-surface-2);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .status-item .label {
+            font-size: 0.9em;
+            color: var(--text-secondary);
+            margin-bottom: 8px;
+            display: block;
+        }
+        .status-item .value {
+            font-size: 1.4em;
+            font-weight: 700;
+        }
+        #connection-status.connected { color: var(--success-color); }
+        #connection-status.disconnected { color: var(--error-color); }
+
+        /* 제어 패널 영역 */
+        .control-panels {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        /* 버튼 및 입력 필드 스타일 */
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; color: var(--text-secondary); }
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            background-color: var(--bg-dark);
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            color: var(--text-primary);
+            box-sizing: border-box;
+        }
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+        button:hover { filter: brightness(1.2); }
+        .btn-primary { background-color: var(--primary-accent); }
+        .btn-success { background-color: var(--success-color); }
+        .btn-warning { background-color: var(--warning-color); }
+        .btn-danger { background-color: var(--error-color); }
+
+        .button-group {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+    </style>
+</head>
+<body>
+
+<div class='container'>
+    <header>
+        <h1><i class="fa-solid fa-satellite-dish"></i> 드론 통합 관제 시스템</h1>
+    </header>
+    
+    <main class="main-content">
+        <!-- 지도 뷰(Simulation) -->
+        <div id="map-view" class="card">
+            <i class="fa-solid fa-map-location-dot"></i>
+            <span>Map View Placeholder</span>
+        </div>
+        
+        <!-- 실시간 상태 패널 -->
+        <div id="status-panel" class="card">
+            <h2><i class="fa-solid fa-gauge-high"></i> 실시간 상태</h2>
+            <div class="status-grid">
+                <span class="label">연결 상태</span>
+                <span class="value disconnected" id="connection-status">연결 끊김</span>
+            </div>
+            <div class="status-item">
+                <span class="label">비행 모드</span>
+                <span class="value" id="flight-mode">N/A</span>
+            </div>
+            <div class="status-item">
+                <span class="label">위도</span>
+                <span class="value" id="drone-lat"></span>
+            </div>
+            <div class="status-item">
+                <span class="label">경도</span>
+                <span class="value" id="drone-lon">N/A</span>
+            </div>
+            <div class="status-item">
+                <span class="label">고도 (m)</span>
+                <span class="value" id="drone-alt">N/A</span>
+            </div>
+            <div class="status-item">
+                <span class="label">배터리 (%)</span>
+                <span class="value" id="drone-battery">N/A</span>
+            </div>
+        </div>
+    </main>
+    
+    <footer class="control-panels">
+        <!-- 수동 제어 패널 -->
+        <div id="manual-control" class="card">
+            <h2><i class="fa-solid fa-gamepad"></i>수동 제어</h2>
+            <div class="form-group">
+                <label for="takeoff-alt">이륙 고도 (m)</label>
+                <input type="number" id="takeoff-alt" value="0">
+            </div>
+            <div class="button-group">
+                <button id="arm-btn" class="btn-warning"><i class="fa-solid fa-unlock"></i> 시동 (Arm) </button>
+                <button id="disarm-btn" class="btn-warning"><i class="fa-solid fa-unlock"></i> 시동 끄기(DisArm) </button>
+                <button id="takeoff-btn" class="btn-primary"><i class="fa-solid fa-unlock"></i> 이륙</button>
+                <button id="land-btn" class="btn-primary"><i class="fa-solid fa-unlock"></i> 착륙</button>
+            </div>
+        </div>
+        
+        <!-- 임무 제어 패널 -->
+        <div id="mission-control" class="card">
+            <h2><i class="fa-solid fa-crosshair"></i> 임무 제어</h2>
+            <div class="form-group">
+                <label for="target-coords">목표 좌표 (위도, 경도)</label>
+                <input type="text" id="target-coords" placeholder="예: 37.5665, 126.9780">
+            </div>
+            <button id="goto-btn" class="btn-success"><i class="fa-solid fa-paper-plane"></i> 목표 지점으로 이동</button>
+        </div>
+        
+        <!-- 긴급 제어 패널 -->
+        <div id="emergency-control" class="card">
+            <h2><i class="fa-solid fa-triangle-exclamation"></i>긴급 제어</h2>
+            <div class="btn-group">
+                <button id="force-return-btn" class="btn-warning"><i class="fa-solid fa-house"></i> 강제 복귀 (RTL)</button>
+                <button id="emergency-stop-btn" class="btn-danger"><i class="fa-solid fa-hand"></i> 즉시 착륙 (LAND)</button>
+            </div>
+        </div>
+    </footer>
+</div>
+
+<!-- JavaScript 로직 -->
+<script>
+    document.addEventListener('DOMContentLoaded', ()=> {
+        const socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port, { query: "type=web" });
+
+        // --- HTML 요소 캐싱 --
+        const elements= {
+            connStatus:     document.getElementById('connection-status'),
+            flightMode:     document.getElementById('flight-mode'),
+            droneLat:       document.getElementById('drone-lat'),
+            droneLon:       document.getElementById('drone-lon'),
+            droneAlt:       document.getElementById('drone-alt'),
+            droneBattery:   document.getElementById('drone-battery'),
+        };
+        
+        // -- Socket Event Handler --
+        socket.on('connect', () => {
+            elements.connStatus.textContent = '연결됨.';
+            elements.connStatus.classList.remove('disconnected');
+            elements.connStatus.classList.add('connected');
+        });
+        
+        socket.on('disconnect', () => {
+            elements.connStatus.textContent = '연결 끊김.';
+            elements.connStatus.classList.remove('connected');
+            elements.connStatus.classList.add('disconnected');
+            
+            // 모든 상태 값 초기화
+            Object.values(elements).forEach(el => {
+                if(el.id !== 'connection-status') el.textContent = 'N/A';
+            });
+            elements.droneLat.textContent       = '0.00';
+            elements.droneLon.textContent       = '0.00';
+            elements.droneAlt.textContent       = '0.0';
+            elements.droneBattery.textContent   = '0';
+        });
+        
+        socket.on('drone_status_update', (data) => {
+            if(!data || Object.keys(data).length === 0) return;
+            
+            // UI 업데이트 (실제 픽스호크 데이터 형식에 맞춰 수정
+            elements.flightMode.textContent     = data.mission_state || 'N/A';
+            elements.droneLat.textContent       = data.position.x   ? data.position.x.toFixed(6) : 'N/A'; // x를 위도로 가정함
+            elements.droneLon.textContent       = data.position.z   ? data.position.z.toFixed(6) : 'N/A'; // z를 경도로 가정함
+            elements.droneAlt.textContent       = data.altitude     ? data.altitude.toFixed(1)   : 'N/A';
+            elements.droneBattery.textContent   = data.battery      ? data.battery.toFixed(1)    : 'N/A';
+            
+        });
+        
+        socket.on('server-message', (msg) => {
+            alert(`서버 메세지: ${msg}`);    // 간단한 알림창으로 서버 메세지를 표시함.
+        });
+        
+        // -- 버튼 클릭 이벤트 핸들러 --
+        document.getElementById('arm-btn').addEventListener('click', () => socket.emit('arm_drone'));
+        document.getElementById('disarm-btn').addEventListener('click', () => socket.emit('disarm_drone'));
+
+        document.getElementById('takeoff-btn').addEventListener('click', () => {
+            const alt = document.getElementById('takeoff-alt').value;
+            socket.emit('takeoff', { altitude: alt });
+        });
+        
+        document.getElementById('land-btn').addEventListener('click', () => socket.emit('land_drone'));
+        
+        document.getElementById('goto-btn').addEventListener('click', () =>{
+            const coords = document.getElementById('target-coords').value.split(',');
+            if (coords.length === 2){
+                const lat = parseFloat(coords[0]);
+                const lon = parseFloat(coords[1]);
+                
+                if (!isNaN(lat) && !isNaN(lon))
+                    socket.emit('report_wildfire', { coordinates: {x : lat, y : 5, z: lon}});
+                else
+                    alert('유효한 좌표를 입력하세요');
+            }
+            
+            else
+                alert('좌표 형식이 올바르지 않습니다. "위도, 경도" 형식으로 입력하세요.');
+        });
+        
+        document.getElementById('force-return-btn').addEventListener('click', () => socket.emit('force_return_pressed'));
+        document.getElementById('emergency_stop_pressed').addEventListener('click', () => socket.emit('emergency_stop_pressed'));
+    });
+        
+</script>
+</body>
+/html>
