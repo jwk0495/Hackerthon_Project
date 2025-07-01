@@ -62,7 +62,8 @@
 >+ 터미널(CMD 또는 PowerShell)을 열고 프로젝트 폴더로 이동합니다.
 >
 >+ :: 예시: C 드라이브의 프로젝트 폴더로 이동
->   + `cd C:\Hackerthon_Project`
+>
+>`cd C:\Hackerthon_Project`
 >
 >+ 가상 환경 생성 (최초 한 번만)
 >
