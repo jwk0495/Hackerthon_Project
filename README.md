@@ -37,20 +37,22 @@
 > 
 > > Git 저장소를 내 컴퓨터로 복제합니다.
 > > 
-> 
-> > git clone https://github.com/저장소-주소/프로젝트이름.git
+> >
+> > git clone   https://github.com/저장소-주소/프로젝트이름.git
 > > 
 > 
 > ### **2. Python 설치**
 > 
-> > PC에 파이썬이 설치되어 있지 않다면, python.org에서 최신 버전을 다운로드하여 설치합니다.설치 시 "Add Python to PATH" 옵션을 반드시 체크해주세요.
+> > PC에 파이썬이 설치되어 있지 않다면, python.org에서 최신 버전을 다운로드하여 설치합니다.
+> >
+> > 설치 시 "Add Python to PATH" 옵션을 반드시 체크해주세요.
 > > 
 > 
 > ### **3. 가상 환경 생성 및 라이브러리 설치**
 > 
 > > 터미널(CMD 또는 PowerShell)을 열고, 1번에서 클론한 프로젝트 폴더로 이동합니다.
 > > 
-> 
+> >
 > > :: 예시: C 드라이브의 프로젝트 폴더로 이동
 > cd C:\Hackerthon_Project
 > > 
@@ -58,25 +60,24 @@
 >     
 >     ```
 >     python -m venv venv
->     
 >     ```
 >     
 > 2. **가상 환경 활성화**
 >     
 >     ```
 >     venv\Scripts\activate
->     
 >     ```
 >     
->     > 성공하면 프롬프트 맨 앞에 (venv) 가 표시됩니다.
->     > 
+>     성공하면 프롬프트 맨 앞에 (venv) 가 표시됩니다.
+>
 > 3. **필수 라이브러리 설치 (매우 중요!)**
 >     
->     > 가상 환경이 활성화된 상태에서, 아래 명령어를 실행하여 프로젝트에 필요한 모든 라이브러리를 설치합니다.
->     > 
+>     가상 환경이 활성화된 상태에서, 아래 명령어를 실행하여 프로젝트에 필요한 모든 라이브러리를 설치합니다.
+>
 >     
->     > pip install flask flask-socketio dronekit pymavlink prompt_toolkit wxPython
->     > 
+>     ```
+>     pip install flask flask-socketio dronekit pymavlink prompt_toolkit wxPython
+>     ```
 
 ## ▶️ 시스템 실행 방법 (How to Run)
 
@@ -117,14 +118,12 @@
 >     ```
 >     cd C:\Hackerthon_Project
 >     venv\Scripts\activate
->     
 >     ```
 >     
 > 2. 아래 명령어로 파이썬 웹 서버를 실행합니다.
 >     
 >     ```
 >     python app.py
->     
 >     ```
 >     
 > 3. 성공하면 `Vehicle Connected!`와 `Running on http://127.0.0.1:8282` 메시지가 나타납니다. **이 창도 끄지 말고 그대로 두세요.**
